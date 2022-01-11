@@ -61,13 +61,15 @@ class Contenedor {
       const bojeto = { ...obj, id };
       nuevoArr.push(bojeto);
       console.log(nuevoArr);
+      console.log(nuevoArr.length);
       //-------------------------------------------
       //el documentoParse lo asignamos a listaObjeto
       //haremos una condicional para añadir el ID
 
-      const arr = this.listaArr;
+      const arr = [this.listaArr];
       console.log(arr);
       console.log(id);
+      console.log(arr);
 
       if (arr.length) {
         console.log(arr);
@@ -176,5 +178,3 @@ console.log("El usuario contiene lo siguiente: " + archivo1.toString());
 archivo1.crearArchivo({ titulo: "Capitan America", Price: 344343 });
 archivo1.leerArchivo();
 archivo1.save({ titulo: "Capitan America", Price: 34434 });
-archivo1.getById(1);
-console.log(arr);
