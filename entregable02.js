@@ -3,12 +3,10 @@ const fs = require("fs");
 
 class Contenedor {
   //creamos el constructor
-  archivo = "";
-  listaArr = [];
 
-  constructor(archivo, listaArr) {
+  constructor(archivo) {
     this.archivo = archivo;
-    this.listaArr = listaArr;
+    this.listaArr = [];
   }
 
   //promesa para leer el documento txt
@@ -45,6 +43,20 @@ class Contenedor {
     console.log(id);
     console.log(obj);
     try {
+      const status = fs.existsSync(`./${this.archivo}.txt`);
+      if (!status) {
+        const objeID = { ...obj, id: 1 };
+        this.listaArr.push(objeID);
+        const objetJason = JSON.stringify(this.listaArr);
+
+        await fs.promises.writeFile(
+          `./${this.archivo}.txt`,
+          objetJason,
+          "utf-8"
+        );
+        return console.log("No existe");
+      }
+
       const documento = await fs.promises.readFile(
         `./${this.archivo}.txt`,
         "utf-8"
@@ -66,21 +78,14 @@ class Contenedor {
       //el documentoParse lo asignamos a listaObjeto
       //haremos una condicional para añadir el ID
 
-      const arr = this.listaArr;
-      console.log(arr);
-      console.log(id);
-      console.log(arr);
-
-      if (arr.length) {
-        console.log(arr);
-        id = arr[arr.length - 1].id + 1;
-        console.log(id);
-        console.log(obj);
+      if (this.listaArr.length) {
+        console.log(this.listaArr);
+        id = this.listaArr[this.listaArr.length - 1].id + 1;
         const objetoId = { ...obj, id }; //creamos un nuevo objeto con el id
-        console.log(objetoId);
         //añadimos el id al objeto
-        arr.push(objetoId);
-        const contenidotxt = JSON.stringify(arr);
+
+        this.listaArr.push(objetoId);
+        const contenidotxt = JSON.stringify(this.listaArr);
         console.log(contenidotxt);
         console.log(objetoId);
         await fs.promises.writeFile(
@@ -90,13 +95,13 @@ class Contenedor {
         );
       } else {
         id = 1;
-        console.log(id);
+        console.log(this.listaArr);
         const objetoId = {
           ...obj,
           id,
         };
-        arr.push(objetoId);
-        const contenidotxt = JSON.stringify(arr);
+        // this.listaArr.push(objetoId);
+        const contenidotxt = JSON.stringify(this.listaArr);
         await fs.promises.writeFile(
           `./${this.archivo}.txt`,
           contenidotxt,
@@ -109,21 +114,18 @@ class Contenedor {
     return id;
   }
 
-  async getById() {
+  async getById(id) {
     const documento = await fs.promises.readFile(`./${this.archivo}.txt`);
-    console.log(documento);
     const documentoParse = JSON.parse(documento.toString());
-    console.log(documentoParse);
     this.listaArr = documentoParse;
-    console.log(this.listaArr);
     const documentFind = this.listaArr.find(({ id: objetoId }) => {
-      id === objetoId;
+      return id === objetoId;
     });
 
     if (!documentFind) {
       return "El documento no existe";
     } else {
-      return documentFind;
+      return console.log(documentFind);
     }
   }
 
@@ -131,10 +133,10 @@ class Contenedor {
     const documento = await fs.promises.readFile(`./${this.archivo}.txt`);
     const documentoParse = JSON.parse(documento.toString());
     this.listaArr = documentoParse;
-    return documentoParse;
+    return console.log(documentoParse);
   }
 
-  async deleteById() {
+  async deleteById(id) {
     try {
       const documento = await fs.promises.readFile(`./${this.archivo}.txt`);
       const documentoParse = JSON.parse(documento.toString());
@@ -177,5 +179,9 @@ class Contenedor {
 const archivo1 = new Contenedor("Archivo");
 console.log("El usuario contiene lo siguiente: " + archivo1.toString());
 // archivo1.crearArchivo({ titulo: "Capitan America", Price: 344343 });
-archivo1.leerArchivo();
+// archivo1.leerArchivo();
 archivo1.save({ titulo: "Capitan America", Price: 34434 });
+// archivo1.getById(3);
+// archivo1.getAll();
+// archivo1.deleteById(5);
+// archivo1.deleteAll();
