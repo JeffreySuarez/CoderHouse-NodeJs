@@ -66,7 +66,7 @@ class Contenedor {
       //el documentoParse lo asignamos a listaObjeto
       //haremos una condicional para añadir el ID
 
-      const arr = [this.listaArr];
+      const arr = this.listaArr;
       console.log(arr);
       console.log(id);
       console.log(arr);
@@ -81,6 +81,7 @@ class Contenedor {
         //añadimos el id al objeto
         arr.push(objetoId);
         const contenidotxt = JSON.stringify(arr);
+        console.log(contenidotxt);
         console.log(objetoId);
         await fs.promises.writeFile(
           `./${this.archivo}.txt`,
@@ -175,6 +176,6 @@ class Contenedor {
 // Ficheros.deleteAll();
 const archivo1 = new Contenedor("Archivo");
 console.log("El usuario contiene lo siguiente: " + archivo1.toString());
-archivo1.crearArchivo({ titulo: "Capitan America", Price: 344343 });
+// archivo1.crearArchivo({ titulo: "Capitan America", Price: 344343 });
 archivo1.leerArchivo();
 archivo1.save({ titulo: "Capitan America", Price: 34434 });
